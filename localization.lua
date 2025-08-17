@@ -1,6 +1,7 @@
-local addon_name, addon_data = ...
-addon_data.localization_table = {}
-local L = addon_data.localization_table
+local addon = WeaponSwingTimer
+
+addon.data.localization_table = {}
+local L = addon.data.localization_table
 
 	--Core
 	L["Thank you for installing WeaponSwingTimer Version"] = "Thank you for installing WeaponSwingTimer Version"

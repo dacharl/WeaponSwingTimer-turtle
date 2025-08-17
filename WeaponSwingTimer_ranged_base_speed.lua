@@ -1,6 +1,6 @@
-local addon_name, addon_data = ...
+local addon = WeaponSwingTimer
 
-local tooltip_name = addon_name .. "Tooltip"
+local tooltip_name = addon.name .. "Tooltip"
 local tooltip = CreateFrame("GameTooltip", tooltip_name, nil, "GameTooltipTemplate")
 tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
 
@@ -9,7 +9,7 @@ local speed_pattern = SPEED .. " (%d%.%d%d)"
 
 local cache = {}
 
-addon_data.GetRangedBaseSpeed = function()
+addon.data.GetRangedBaseSpeed = function()
 	-- Default speed
 	local speed = 1
 

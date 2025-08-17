@@ -1,0 +1,1 @@
+WeaponSwingTimer = WeaponSwingTimer or { __name = "WeaponSwingTimer (English)", __version = "6.5.4", data = {} }

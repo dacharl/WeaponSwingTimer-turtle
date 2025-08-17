@@ -1,6 +1,5 @@
-## Interface: 11504
+## Interface: 11200
 ## Title-deDE: WeaponSwingTimer (Deutsch)
-## Title-enUS: WeaponSwingTimer (English)
 ## Title-esES: WeaponSwingTimer (Español)
 ## Title-esMX: WeaponSwingTimer (Español)
 ## Title-frFR: WeaponSwingTimer (Français)
@@ -10,8 +9,9 @@
 ## Title-ruRU: WeaponSwingTimer (русский)
 ## Title-zhCN: WeaponSwingTimer (中文)
 ## Title-zhTW: WeaponSwingTimer (中文)
+## Title-enUS: WeaponSwingTimer (English)
+## Title: WeaponSwingTimer |cff007fff -Turtle-|r
 ## Notes-deDE: Zeichnet die Schwungzeiten für Nahkampfwaffen auf. Hunters Auto Shot und Wands Shoot.
-## Notes-enUS: Tracks swing times for melee weapons, Hunter's Auto Shot, and wand's Shoot.
 ## Notes-esES: Rastrea los tiempos de swing de las armas cuerpo a cuerpo Hunters Auto Shot y las varitas Shoot.
 ## Notes-esMX: Rastrea los tiempos de swing de las armas cuerpo a cuerpo Hunters Auto Shot y las varitas Shoot.
 ## Notes-frFR: Suit les temps de swing pour les armes de mêlée Hunters Auto Shot et les baguettes magiques Shoot.
@@ -21,13 +21,17 @@
 ## Notes-ruRU: Отслеживает время прохождения оружия ближнего боя. Охотники с автоматическим выстрелом и палочки стреляют.
 ## Notes-zhCN: 跟踪近战武器的挥动时间猎人自动射击和魔杖射击。
 ## Notes-zhTW: 跟踪近戰武器的揮動時間獵人自動射擊和魔杖射擊。
+## Notes-enUS: Tracks swing times for melee weapons, Hunter's Auto Shot, and wand's Shoot.
+## Notes: Tracks swing times for melee weapons, Hunter's Auto Shot, and wand's Shoot.
 ## Author: LeftHandGlove, WatchYourSixx
 ## Version: 7.3.2
 ## DefaultState: enabled
 ## OptionalDeps: ColorPickerPlus
 ## SavedVariablesPerCharacter: character_core_settings, character_player_settings, character_target_settings, character_hunter_settings, character_castbar_settings
 
+onetwelve_init.lua
 localization.lua
+WeaponSwingTimer_ranged_DB.lua
 WeaponSwingTimer_ranged_base_speed.lua
 WeaponSwingTimer_Utils.lua
 WeaponSwingTimer_Player.lua

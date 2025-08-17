@@ -1,13 +1,13 @@
-local addon_name, addon_data = ...
-local L = addon_data.localization_table
+local addon = WeaponSwingTimer
+local L = addon.data.localization_table
 
-addon_data.core = {}
+addon.data.core = {}
 
-addon_data.core.core_frame = CreateFrame("Frame", addon_name .. "CoreFrame", UIParent)
-addon_data.core.core_frame:RegisterEvent("ADDON_LOADED")
+addon.data.core.core_frame = CreateFrame("Frame", addon.name .. "CoreFrame", UIParent)
+addon.data.core.core_frame:RegisterEvent("ADDON_LOADED")
 
-addon_data.core.all_timers = {
-    addon_data.player, addon_data.target
+addon.data.core.all_timers = {
+    addon.data.player, addon.data.target
 }
 
 local version = "7.3.2"
@@ -15,12 +15,12 @@ local version = "7.3.2"
 local load_message = L["Thank you for installing WeaponSwingTimer Version"] .. " " .. version .. 
                      " " .. L["by WatchYourSixx! Use |cFFFFC300/wst|r for more options."]
                      
-addon_data.core.default_settings = {
+addon.data.core.default_settings = {
     one_frame = false,
 	welcome_message = true
 }
 
-addon_data.core.in_combat = false
+addon.data.core.in_combat = false
 
 local swing_reset_spells = {}
 swing_reset_spells['DRUID'] = {
@@ -525,139 +525,139 @@ swing_reset_spells['WARRIOR'] = {
 }
 
 local function LoadAllSettings()
-    addon_data.core.LoadSettings()
-    addon_data.player.LoadSettings()
-    addon_data.target.LoadSettings()
-    addon_data.hunter.LoadSettings()
-	addon_data.castbar.LoadSettings()
+    addon.data.core.LoadSettings()
+    addon.data.player.LoadSettings()
+    addon.data.target.LoadSettings()
+    addon.data.hunter.LoadSettings()
+	addon.data.castbar.LoadSettings()
 end
 
-addon_data.core.RestoreAllDefaults = function()
-    addon_data.core.RestoreDefaults()
-    addon_data.player.RestoreDefaults()
-    addon_data.target.RestoreDefaults()
-    addon_data.hunter.RestoreDefaults()
-	addon_data.castbar.RestoreDefaults()
+addon.data.core.RestoreAllDefaults = function()
+    addon.data.core.RestoreDefaults()
+    addon.data.player.RestoreDefaults()
+    addon.data.target.RestoreDefaults()
+    addon.data.hunter.RestoreDefaults()
+	addon.data.castbar.RestoreDefaults()
 end
 
 local function InitializeAllVisuals()
-    addon_data.player.InitializeVisuals()
-    addon_data.target.InitializeVisuals()
-    addon_data.hunter.InitializeVisuals()
-	addon_data.castbar.InitializeVisuals()
-    addon_data.config.InitializeVisuals()
+    addon.data.player.InitializeVisuals()
+    addon.data.target.InitializeVisuals()
+    addon.data.hunter.InitializeVisuals()
+	addon.data.castbar.InitializeVisuals()
+    addon.data.config.InitializeVisuals()
 end
 
 
-addon_data.core.UpdateAllVisualsOnSettingsChange = function()
-    addon_data.player.UpdateVisualsOnSettingsChange()
-    addon_data.target.UpdateVisualsOnSettingsChange()
-    addon_data.hunter.UpdateVisualsOnSettingsChange()
-	addon_data.castbar.UpdateVisualsOnSettingsChange()
+addon.data.core.UpdateAllVisualsOnSettingsChange = function()
+    addon.data.player.UpdateVisualsOnSettingsChange()
+    addon.data.target.UpdateVisualsOnSettingsChange()
+    addon.data.hunter.UpdateVisualsOnSettingsChange()
+	addon.data.castbar.UpdateVisualsOnSettingsChange()
 end
 
-addon_data.core.LoadSettings = function()
+addon.data.core.LoadSettings = function()
     -- If the carried over settings dont exist then make them
     if not character_core_settings then
         character_core_settings = {}
     end
     -- If the carried over settings aren't set then set them to the defaults
-    for setting, value in pairs(addon_data.core.default_settings) do
+    for setting, value in pairs(addon.data.core.default_settings) do
         if character_core_settings[setting] == nil then
             character_core_settings[setting] = value
         end
     end
 end
 
-addon_data.core.RestoreDefaults = function()
-    for setting, value in pairs(addon_data.core.default_settings) do
+addon.data.core.RestoreDefaults = function()
+    for setting, value in pairs(addon.data.core.default_settings) do
         character_core_settings[setting] = value
     end
 end
 
 local function CoreFrame_OnUpdate(self, elapsed)
-    addon_data.player.OnUpdate(elapsed)
-    addon_data.target.OnUpdate(elapsed)
-    addon_data.hunter.OnUpdate(elapsed)
-	addon_data.castbar.OnUpdate(elapsed)
+    addon.data.player.OnUpdate(elapsed)
+    addon.data.target.OnUpdate(elapsed)
+    addon.data.hunter.OnUpdate(elapsed)
+	addon.data.castbar.OnUpdate(elapsed)
 end
 
-addon_data.core.MissHandler = function(unit, miss_type, is_offhand, is_player)
+addon.data.core.MissHandler = function(unit, miss_type, is_offhand, is_player)
     if miss_type == "PARRY" then
         if unit == "player" then
             -- parry haste calculations:
             -- if swing is below 20%, do nothing.
             -- if swing is above 20%, reduce by 40% of main_weapon_speed
             -- if new swing is below 20%, set to 20% (parry cannot reduce swing timer below 20%)
-            local min_swing_time = addon_data.target.main_weapon_speed * 0.2
+            local min_swing_time = addon.data.target.main_weapon_speed * 0.2
 
-            if min_swing_time >= addon_data.target.main_swing_timer then
+            if min_swing_time >= addon.data.target.main_swing_timer then
                 -- do nothing
 			else
-                addon_data.target.main_swing_timer = addon_data.target.main_swing_timer - (addon_data.target.main_weapon_speed * 0.4)
+                addon.data.target.main_swing_timer = addon.data.target.main_swing_timer - (addon.data.target.main_weapon_speed * 0.4)
 
-                if addon_data.target.main_swing_timer < min_swing_time then
-                    addon_data.target.main_swing_timer = min_swing_time
+                if addon.data.target.main_swing_timer < min_swing_time then
+                    addon.data.target.main_swing_timer = min_swing_time
                 end
             end
             if not is_offhand then
 			-- resets swing timer if it's not an extra attack, attempt to fix random resets mid-swing
-				if (addon_data.player.extra_attacks_flag == false) then
-					addon_data.player.ResetMainSwingTimer()
+				if (addon.data.player.extra_attacks_flag == false) then
+					addon.data.player.ResetMainSwingTimer()
 				end
-			addon_data.player.extra_attacks_flag = false
+			addon.data.player.extra_attacks_flag = false
             else
-                addon_data.player.ResetOffSwingTimer()
+                addon.data.player.ResetOffSwingTimer()
             end
         elseif unit == "target" and is_player then
             -- parry haste calculations:
             -- if swing is below 20%, do nothing.
             -- if swing is above 20%, reduce by 40% of main_weapon_speed
             -- if new swing is below 20%, set to 20% (parry cannot reduce swing timer below 20%)
-            local min_swing_time = addon_data.player.main_weapon_speed * 0.2
+            local min_swing_time = addon.data.player.main_weapon_speed * 0.2
 
-            if min_swing_time >= addon_data.player.main_swing_timer then
+            if min_swing_time >= addon.data.player.main_swing_timer then
                 -- do nothing
 			else
-                addon_data.player.main_swing_timer = addon_data.player.main_swing_timer - (addon_data.player.main_weapon_speed * 0.4)
+                addon.data.player.main_swing_timer = addon.data.player.main_swing_timer - (addon.data.player.main_weapon_speed * 0.4)
 
-                if addon_data.player.main_swing_timer < min_swing_time then
-                    addon_data.player.main_swing_timer = min_swing_time
+                if addon.data.player.main_swing_timer < min_swing_time then
+                    addon.data.player.main_swing_timer = min_swing_time
                 end
             end
             if not is_offhand then
-                addon_data.target.ResetMainSwingTimer()
+                addon.data.target.ResetMainSwingTimer()
             else
-                addon_data.target.ResetOffSwingTimer()
+                addon.data.target.ResetOffSwingTimer()
             end
 		elseif unit == "target" then
             -- do nothing
         else
-            addon_data.utils.PrintMsg(L["Unexpected Unit Type in MissHandler()."])
+            addon.data.utils.PrintMsg(L["Unexpected Unit Type in MissHandler()."])
         end
     else
         if unit == "player" then
             if not is_offhand then
-                if (addon_data.player.extra_attacks_flag == false) then
-			addon_data.player.ResetMainSwingTimer()
+                if (addon.data.player.extra_attacks_flag == false) then
+			addon.data.player.ResetMainSwingTimer()
 		end
-		addon_data.player.extra_attacks_flag = false
+		addon.data.player.extra_attacks_flag = false
             else
-                addon_data.player.ResetOffSwingTimer()
+                addon.data.player.ResetOffSwingTimer()
             end 
         elseif unit == "target" then
             if not is_offhand then
-                addon_data.target.ResetMainSwingTimer()
+                addon.data.target.ResetMainSwingTimer()
             else
-                addon_data.target.ResetOffSwingTimer()
+                addon.data.target.ResetOffSwingTimer()
             end 
 		else
-            addon_data.utils.PrintMsg(L["Unexpected Unit Type in MissHandler()."])
+            addon.data.utils.PrintMsg(L["Unexpected Unit Type in MissHandler()."])
         end
     end
 end
 
-addon_data.core.SpellHandler = function(unit, spell_id)
+addon.data.core.SpellHandler = function(unit, spell_id)
     local _, player_class, _ = UnitClass('player')
     for class, spell_table in pairs(swing_reset_spells) do
         if player_class == class then
@@ -665,11 +665,11 @@ addon_data.core.SpellHandler = function(unit, spell_id)
 				if spell_id == curr_spell_id then
 				
                     if unit == "player" then
-                        addon_data.player.ResetMainSwingTimer()
+                        addon.data.player.ResetMainSwingTimer()
                     elseif unit == "target" then
-                        addon_data.target.ResetMainSwingTimer()
+                        addon.data.target.ResetMainSwingTimer()
                     else
-                        addon_data.utils.PrintMsg(L["Unexpected Unit Type in SpellHandler()."])
+                        addon.data.utils.PrintMsg(L["Unexpected Unit Type in SpellHandler()."])
                     end
                 end
                 
@@ -680,27 +680,27 @@ end
 
 local function OnAddonLoaded(self)
     -- Attach the rest of the events and scripts to the core frame
-    addon_data.core.core_frame:SetScript("OnUpdate", CoreFrame_OnUpdate)
-    addon_data.core.core_frame:RegisterEvent("PLAYER_REGEN_ENABLED")
-    addon_data.core.core_frame:RegisterEvent("PLAYER_REGEN_DISABLED")
-    addon_data.core.core_frame:RegisterEvent("PLAYER_TARGET_CHANGED")
-    addon_data.core.core_frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    addon_data.core.core_frame:RegisterEvent("UNIT_INVENTORY_CHANGED")
-    addon_data.core.core_frame:RegisterEvent("START_AUTOREPEAT_SPELL")
-    addon_data.core.core_frame:RegisterEvent("STOP_AUTOREPEAT_SPELL")
-    addon_data.core.core_frame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-    addon_data.core.core_frame:RegisterEvent("UNIT_SPELLCAST_FAILED")
-    addon_data.core.core_frame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
-    addon_data.core.core_frame:RegisterEvent("UNIT_SPELLCAST_FAILED_QUIET")
+    addon.data.core.core_frame:SetScript("OnUpdate", CoreFrame_OnUpdate)
+    addon.data.core.core_frame:RegisterEvent("PLAYER_REGEN_ENABLED")
+    addon.data.core.core_frame:RegisterEvent("PLAYER_REGEN_DISABLED")
+    addon.data.core.core_frame:RegisterEvent("PLAYER_TARGET_CHANGED")
+    addon.data.core.core_frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    addon.data.core.core_frame:RegisterEvent("UNIT_INVENTORY_CHANGED")
+    addon.data.core.core_frame:RegisterEvent("START_AUTOREPEAT_SPELL")
+    addon.data.core.core_frame:RegisterEvent("STOP_AUTOREPEAT_SPELL")
+    addon.data.core.core_frame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+    addon.data.core.core_frame:RegisterEvent("UNIT_SPELLCAST_FAILED")
+    addon.data.core.core_frame:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED")
+    addon.data.core.core_frame:RegisterEvent("UNIT_SPELLCAST_FAILED_QUIET")
     -- Load the settings for the core and all timers
     LoadAllSettings()
     InitializeAllVisuals()
     -- Any other misc operations that happen at the start
-    addon_data.player.ZeroizeSwingTimers()
-    addon_data.target.ZeroizeSwingTimers()
+    addon.data.player.ZeroizeSwingTimers()
+    addon.data.target.ZeroizeSwingTimers()
 	
     if character_core_settings.welcome_message then	
-		addon_data.utils.PrintMsg(load_message)	
+		addon.data.utils.PrintMsg(load_message)	
 	end
 end
 
@@ -711,35 +711,35 @@ local function CoreFrame_OnEvent(self, event, ...)
             OnAddonLoaded()
         end
     elseif event == "PLAYER_REGEN_ENABLED" then
-        addon_data.core.in_combat = false
+        addon.data.core.in_combat = false
     elseif event == "PLAYER_REGEN_DISABLED" then
-        addon_data.core.in_combat = true
+        addon.data.core.in_combat = true
     elseif event == "PLAYER_TARGET_CHANGED" then
-        addon_data.target.OnPlayerTargetChanged()
+        addon.data.target.OnPlayerTargetChanged()
     elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
         local combat_info = {CombatLogGetCurrentEventInfo()}
-        addon_data.player.OnCombatLogUnfiltered(combat_info)
-        addon_data.target.OnCombatLogUnfiltered(combat_info)
-		addon_data.hunter.OnCombatLogUnfiltered(combat_info)
-		addon_data.castbar.OnCombatLogUnfiltered(combat_info)
+        addon.data.player.OnCombatLogUnfiltered(combat_info)
+        addon.data.target.OnCombatLogUnfiltered(combat_info)
+		addon.data.hunter.OnCombatLogUnfiltered(combat_info)
+		addon.data.castbar.OnCombatLogUnfiltered(combat_info)
     elseif event == "UNIT_INVENTORY_CHANGED" then
-        addon_data.player.OnInventoryChange()
-        addon_data.target.OnInventoryChange()
-		addon_data.hunter.OnInventoryChange()
+        addon.data.player.OnInventoryChange()
+        addon.data.target.OnInventoryChange()
+		addon.data.hunter.OnInventoryChange()
     elseif event == "START_AUTOREPEAT_SPELL" then
-        addon_data.hunter.OnStartAutorepeatSpell()
+        addon.data.hunter.OnStartAutorepeatSpell()
     elseif event == "STOP_AUTOREPEAT_SPELL" then
-        addon_data.hunter.OnStopAutorepeatSpell()
+        addon.data.hunter.OnStopAutorepeatSpell()
     elseif event == "UNIT_SPELLCAST_SUCCEEDED" then
-        addon_data.hunter.OnUnitSpellCastSucceeded(args[1], args[3])
-		addon_data.castbar.OnUnitSpellCastSucceeded(args[1], args[3])
+        addon.data.hunter.OnUnitSpellCastSucceeded(args[1], args[3])
+		addon.data.castbar.OnUnitSpellCastSucceeded(args[1], args[3])
     elseif event == "UNIT_SPELLCAST_FAILED" then
-		addon_data.castbar.OnUnitSpellCastFailed(args[1], args[3])
+		addon.data.castbar.OnUnitSpellCastFailed(args[1], args[3])
     elseif event == "UNIT_SPELLCAST_INTERRUPTED" then
-		addon_data.hunter.OnUnitSpellCastInterrupted(args[1], args[3])
-		addon_data.castbar.OnUnitSpellCastInterrupted(args[1], args[3])
+		addon.data.hunter.OnUnitSpellCastInterrupted(args[1], args[3])
+		addon.data.castbar.OnUnitSpellCastInterrupted(args[1], args[3])
     elseif event == "UNIT_SPELLCAST_FAILED_QUIET" then
-        addon_data.hunter.OnUnitSpellCastFailedQuiet(args[1], args[3])
+        addon.data.hunter.OnUnitSpellCastFailedQuiet(args[1], args[3])
     end
 end
 
@@ -752,4 +752,4 @@ SlashCmdList["WEAPONSWINGTIMER_CONFIG"] = function(option)
 end
 
 -- Setup the core of the addon (This is like calling main in C)
-addon_data.core.core_frame:SetScript("OnEvent", CoreFrame_OnEvent)
+addon.data.core.core_frame:SetScript("OnEvent", CoreFrame_OnEvent)
